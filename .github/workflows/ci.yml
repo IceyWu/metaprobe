@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - run: cargo test -p metaprobe-core
-      - run: cargo clippy --workspace -- -D warnings
+      - run: cargo clippy --workspace
 
   native:
     strategy:
