@@ -4,7 +4,6 @@ const required = [
   'native/index.js',
   'native/index.d.ts',
   'wasm/index.js',
-  'wasm/types.d.ts',
   'wasm/index_bg.wasm',
 ]
 

@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback, type DragEvent } from 'react'
 import mediaInfoWasmUrl from 'mediainfo.js/MediaInfoModule.wasm?url'
 import initMetaprobe, * as metaprobeWasm from '../../wasm/index.js'
-import type { MediaMeta } from '../../wasm/types'
+import type { MediaMeta } from './types'
 import './App.css'
 
 // ── types ──
