@@ -62,8 +62,8 @@ jobs:
     needs: native
     runs-on: ubuntu-latest
     env:
-      EXIF_PLUS_SKIP_BUILD: '1'
-      EXIF_PLUS_VERIFY_ALL_TARGETS: '1'
+      METAPROBE_SKIP_BUILD: '1'
+      METAPROBE_VERIFY_ALL_TARGETS: '1'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
