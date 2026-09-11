@@ -1,0 +1,6 @@
+node_modules
+target
+native/*.node
+wasm/index.js
+wasm/index_bg.wasm
+wasm/index_bg.wasm.d.ts

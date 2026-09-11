@@ -1,0 +1,105 @@
+{
+  "name": "metaprobe",
+  "version": "0.0.1",
+  "packageManager": "pnpm@12.2.1",
+  "description": "High-performance image and video metadata extraction powered by Rust — works in Node.js (native) and browser (WASM)",
+  "author": {
+    "name": "Lev Wu",
+    "email": "hi@levwu.me",
+    "url": "https://github.com/IceyWu"
+  },
+  "homepage": "https://github.com/IceyWu/metaprobe#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IceyWu/metaprobe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/IceyWu/metaprobe/issues"
+  },
+  "funding": "https://github.com/sponsors/IceyWu",
+  "main": "native/index.js",
+  "types": "native/index.d.ts",
+  "exports": {
+    ".": {
+      "node": {
+        "types": "./native/index.d.ts",
+        "default": "./native/index.js"
+      },
+      "default": {
+        "types": "./wasm/types.d.ts",
+        "default": "./wasm/index.js"
+      }
+    }
+  },
+  "files": [
+    "native/",
+    "wasm/"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "napi": {
+    "binaryName": "metaprobe",
+    "targets": [
+      "x86_64-apple-darwin",
+      "aarch64-apple-darwin",
+      "x86_64-pc-windows-msvc",
+      "x86_64-unknown-linux-gnu",
+      "aarch64-unknown-linux-gnu"
+    ]
+  },
+  "scripts": {
+    "build:napi": "napi build --output-dir native --platform --release --manifest-path crates/napi/Cargo.toml",
+    "build:napi:debug": "napi build --output-dir native --platform --manifest-path crates/napi/Cargo.toml",
+    "build:wasm": "wasm-pack build crates/wasm --target web --out-dir ../../wasm --out-name index",
+    "build": "pnpm build:napi && pnpm build:wasm",
+    "benchmark": "node scripts/benchmark.mjs",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release:check": "node scripts/release-check.mjs",
+    "release": "pnpm release:check && pnpm exec changeset publish",
+    "prepack": "node scripts/prepack.mjs",
+    "prepublishOnly": "node scripts/verify-package.mjs"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^3.0.2",
+    "@napi-rs/cli": "^3.9.0",
+    "exifr": "^7.1.3",
+    "mediainfo.js": "^0.3.7"
+  },
+  "engines": {
+    "node": ">= 16"
+  },
+  "license": "MIT",
+  "keywords": [
+    "exif",
+    "image",
+    "metadata",
+    "jpeg",
+    "png",
+    "gif",
+    "bmp",
+    "tiff",
+    "webp",
+    "ico",
+    "svg",
+    "jpeg2000",
+    "jxl",
+    "heic",
+    "avif",
+    "cr3",
+    "mov",
+    "mp4",
+    "avi",
+    "webm",
+    "mkv",
+    "flv",
+    "mpeg",
+    "ogg",
+    "napi",
+    "wasm",
+    "rust",
+    "native",
+    "browser"
+  ]
+}

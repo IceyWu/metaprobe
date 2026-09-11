@@ -1,0 +1,18 @@
+[package]
+name = "metaprobe-core"
+version = "0.1.0"
+edition = "2021"
+authors = ["Lev Wu <hi@levwu.me>"]
+license = "MIT"
+repository = "https://github.com/IceyWu/metaprobe"
+description = "Core image metadata parsing logic for metaprobe"
+
+[lib]
+name = "metaprobe_core"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+sha2 = "0.10"
+hex = "0.4"
+kamadak-exif = "0.6"
+flate2 = "1"

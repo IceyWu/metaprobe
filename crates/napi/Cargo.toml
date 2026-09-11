@@ -1,0 +1,20 @@
+[package]
+name = "metaprobe-napi"
+version = "0.1.0"
+edition = "2021"
+authors = ["Lev Wu <hi@levwu.me>"]
+license = "MIT"
+repository = "https://github.com/IceyWu/metaprobe"
+description = "napi-rs Node.js bindings for metaprobe"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+metaprobe-core = { path = "../core" }
+napi = { version = "3", features = ["napi9", "async", "serde-json"] }
+napi-derive = { version = "3", features = ["type-def"] }
+rayon = "1.10"
+
+[build-dependencies]
+napi-build = "2"

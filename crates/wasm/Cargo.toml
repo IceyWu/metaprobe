@@ -1,0 +1,21 @@
+[package]
+name = "metaprobe-wasm"
+version = "0.1.0"
+edition = "2021"
+authors = ["Lev Wu <hi@levwu.me>"]
+license-file = "../../LICENSE"
+repository = "https://github.com/IceyWu/metaprobe"
+description = "WASM bindings for metaprobe, works in browser and Node.js"
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+metaprobe-core = { path = "../core" }
+wasm-bindgen = "0.2"
+serde = { version = "1", features = ["derive"] }
+serde-wasm-bindgen = "0.6"
+js-sys = "0.3"
