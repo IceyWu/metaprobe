@@ -63,3 +63,18 @@ jobs:
       - run: pnpm build:wasm
       - run: pnpm --dir playground lint
       - run: pnpm --dir playground build
+
+  ios:
+    runs-on: macos-14
+    strategy:
+      matrix:
+        target:
+          - aarch64-apple-ios
+          - aarch64-apple-ios-sim
+          - x86_64-apple-ios
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - run: cargo build -p metaprobe-ios-ffi --release --target ${{ matrix.target }}

@@ -11,6 +11,21 @@ permissions:
   pull-requests: write
 
 jobs:
+  ios:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios,aarch64-apple-ios-sim,x86_64-apple-ios
+      - name: Build iOS XCFramework
+        run: ./scripts/build-ios-xcframework.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Metaprobe.xcframework
+          path: Metaprobe.xcframework
+          if-no-files-found: error
+
   native:
     strategy:
       fail-fast: false

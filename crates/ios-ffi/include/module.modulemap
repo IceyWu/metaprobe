@@ -1,0 +1,4 @@
+module MetaprobeFFI {
+  header "metaprobe_ios.h"
+  export *
+}

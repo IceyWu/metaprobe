@@ -1,0 +1,20 @@
+name: MetaprobeDemo
+options:
+  deploymentTarget:
+    iOS: "14.0"
+packages:
+  metaprobe:
+    path: ../..
+targets:
+  MetaprobeDemo:
+    type: application
+    platform: iOS
+    sources:
+      - path: .
+    dependencies:
+      - package: metaprobe
+        product: MetaprobeSwift
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.iceywu.metaprobe-demo
+      INFOPLIST_KEY_UILaunchScreen_Generation: YES
+      SWIFT_VERSION: 5.9

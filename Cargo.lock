@@ -292,6 +292,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "metaprobe-ios-ffi"
+version = "0.1.0"
+dependencies = [
+ "metaprobe-core",
+ "serde_json",
+]
+
+[[package]]
 name = "metaprobe-napi"
 version = "0.1.0"
 dependencies = [
