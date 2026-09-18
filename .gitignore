@@ -1,5 +1,10 @@
 node_modules
 target
+.build
+.swiftpm
+build
+.xcodebuildmcp
+**/xcuserdata
 native/*.node
 wasm/index.js
 wasm/index_bg.wasm

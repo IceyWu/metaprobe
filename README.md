@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/runtime-Node.js%20%7C%20Browser-06b6d4" alt="Node.js and browser" />
   <img src="https://img.shields.io/badge/formats-content--detected%20image%20%26%20video%20containers-2563eb" alt="Content-detected image and video containers" />
   <img src="https://img.shields.io/badge/npm-metaprobe-CB3837?logo=npm&logoColor=white" alt="npm package metaprobe" />
-  <img src="https://img.shields.io/badge/npm%20version-0.1.0-CB3837?logo=npm&logoColor=white" alt="npm package version 0.1.0" />
+  <img src="https://img.shields.io/badge/npm%20version-0.0.1-CB3837?logo=npm&logoColor=white" alt="npm package version 0.0.1" />
   <img src="https://img.shields.io/badge/npm%20status-not%20published-lightgrey?logo=npm&logoColor=white" alt="npm not published" />
 </p>
 
@@ -43,6 +43,8 @@ WASM adapter.
 - Native Node.js API for filesystem paths and parallel batch extraction.
 - WASM API for `Uint8Array` input, fast extraction, optional hashing, and batch
   extraction in browsers.
+- Swift Package for iOS, backed by the same Rust parser and supporting photo
+  and video metadata extraction.
 - No runtime JavaScript parsing dependency for the core metadata path.
 
 ## Installation
@@ -101,6 +103,29 @@ Use `extractMeta` when the WASM implementation should calculate SHA-256. Use
 `extractMetaFastSized` is useful for video slices because it preserves the
 original file size for bitrate calculation.
 
+## Swift / iOS API
+
+Add the repository URL in Xcode with **File > Add Package Dependencies…**:
+
+```text
+https://github.com/IceyWu/metaprobe.git
+```
+
+Select the `MetaprobeSwift` product, then parse the bytes returned by
+`PhotosPicker`, `PHPickerViewController`, or your own file loader:
+
+```swift
+import MetaprobeSwift
+
+let metadata = try Metaprobe.parse(data: data, filename: "IMG_0001.HEIC")
+print(metadata.kind, metadata.format, metadata.width, metadata.height)
+print(metadata.exif["Make"] ?? "")
+```
+
+The Swift package supports iOS 13 and newer. The runnable SwiftUI example is
+in [`Examples/MetaprobeDemo`](./Examples/MetaprobeDemo); it targets iOS 27 for
+the current Xcode simulator and uses `PhotosPicker` for photo/video selection.
+
 ## Returned data
 
 Images expose fields such as:
@@ -134,6 +159,7 @@ meta.metadata // QuickTime metadata such as location/device fields
 ```text
 Node.js consumer  -> native/index.js -> crates/napi -> crates/core
 Browser consumer  -> wasm/index.js   -> crates/wasm -> crates/core
+Swift/iOS consumer -> MetaprobeSwift -> Metaprobe.xcframework -> crates/ios-ffi -> crates/core
                                            \-> shared Rust parsing logic
 Playground        -> React/Vite comparison UI
                    -> metaprobe WASM vs exifr / mediainfo.js references
@@ -180,12 +206,13 @@ cargo clippy --workspace -- -D warnings
 ```
 
 The CI matrix builds native bindings for Windows, Linux, and macOS targets,
-and separately validates the WASM and playground builds.
+validates the WASM and playground builds, and compiles all supported iOS Rust
+targets. The Release workflow additionally assembles the iOS XCFramework.
 
 ## Release
 
-This project uses Changesets for versioning and npm releases. The first public
-release is prepared as `0.1.0`; later changes should add a changeset:
+This project uses Changesets for versioning and npm releases. The current
+package version is `0.0.1`; later user-facing changes should add a changeset:
 
 ```bash
 pnpm changeset
@@ -194,9 +221,11 @@ pnpm release
 ```
 
 On GitHub, the release workflow builds the native bindings for the supported
-platforms, assembles the WASM package, and then creates a version PR or
-publishes through Changesets. Configure the repository `NPM_TOKEN` secret
-before enabling the first publish.
+platforms, assembles the WASM package, builds the iOS XCFramework artifact, and
+then creates a version PR or publishes through Changesets. Configure the
+repository `NPM_TOKEN` secret before enabling the first publish. The Swift
+package is consumed from the Git repository; publish a tagged Git release when
+you want applications to pin a stable Swift version.
 
 ## License
 

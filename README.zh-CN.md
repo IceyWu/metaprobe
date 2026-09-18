@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/runtime-Node.js%20%7C%20Browser-06b6d4" alt="Node.js 和浏览器" />
   <img src="https://img.shields.io/badge/formats-content--detected%20image%20%26%20video%20containers-2563eb" alt="按内容识别图片和视频容器" />
   <img src="https://img.shields.io/badge/npm-metaprobe-CB3837?logo=npm&logoColor=white" alt="npm 包 metaprobe" />
-  <img src="https://img.shields.io/badge/npm%20version-0.1.0-CB3837?logo=npm&logoColor=white" alt="npm 版本 0.1.0" />
+  <img src="https://img.shields.io/badge/npm%20version-0.0.1-CB3837?logo=npm&logoColor=white" alt="npm 版本 0.0.1" />
   <img src="https://img.shields.io/badge/npm%20status-not%20published-lightgrey?logo=npm&logoColor=white" alt="npm 尚未发布" />
 </p>
 
@@ -41,6 +41,7 @@ N-API 和浏览器 WASM 两种适配层对外提供能力。
   帧率和码率。
 - Node.js 原生 API 支持文件路径和并行批量解析。
 - WASM API 支持 `Uint8Array`、快速解析、可选哈希和批量解析。
+- Swift Package 支持 iOS，底层使用相同的 Rust 解析核心，可解析照片和视频元数据。
 - 核心元数据解析路径没有运行时 JavaScript 解析依赖。
 
 ## 安装
@@ -99,6 +100,29 @@ const meta = extractMetaFastSized(bytes, file.name, file.size)
 API 单独计算哈希，使用 `extractMetaFast`。处理视频切片时，推荐使用
 `extractMetaFastSized`，它可以保留原始文件大小并正确计算码率。
 
+## Swift / iOS API
+
+在 Xcode 中通过 **File > Add Package Dependencies…** 添加：
+
+```text
+https://github.com/IceyWu/metaprobe.git
+```
+
+选择 `MetaprobeSwift` 产品，然后把 `PhotosPicker`、`PHPickerViewController`
+或其他文件读取器得到的二进制数据传给解析器：
+
+```swift
+import MetaprobeSwift
+
+let metadata = try Metaprobe.parse(data: data, filename: "IMG_0001.HEIC")
+print(metadata.kind, metadata.format, metadata.width, metadata.height)
+print(metadata.exif["Make"] ?? "")
+```
+
+Swift Package 支持 iOS 13 及以上。可运行的 SwiftUI 示例位于
+[`Examples/MetaprobeDemo`](./Examples/MetaprobeDemo)，当前示例为适配最新
+Xcode 模拟器而使用 iOS 27，并通过 `PhotosPicker` 选择照片或视频。
+
 ## 返回数据
 
 图片常用字段：
@@ -132,6 +156,7 @@ meta.metadata // QuickTime 元数据，例如位置和设备信息
 ```text
 Node.js 调用方 -> native/index.js -> crates/napi -> crates/core
 浏览器调用方  -> wasm/index.js   -> crates/wasm -> crates/core
+Swift/iOS 调用方 -> MetaprobeSwift -> Metaprobe.xcframework -> crates/ios-ffi -> crates/core
                                                      \-> 共用 Rust 解析逻辑
 Playground     -> React/Vite 对比页面
                  -> metaprobe WASM 对比 exifr / mediainfo.js
@@ -173,11 +198,12 @@ cargo test -p metaprobe-core
 cargo clippy --workspace -- -D warnings
 ```
 
-CI 会为 Windows、Linux 和 macOS 构建原生绑定，并单独验证 WASM 和 playground。
+CI 会为 Windows、Linux 和 macOS 构建原生绑定，验证 WASM 和 playground，
+并编译所有支持的 iOS Rust target。Release 工作流还会组装 iOS XCFramework。
 
 ## 发布
 
-项目使用 Changesets 管理版本和 npm 发布。首个公开版本准备为 `0.1.0`，
+项目使用 Changesets 管理版本和 npm 发布。当前包版本为 `0.0.1`，
 后续面向用户的变更需要先创建 changeset：
 
 ```bash
@@ -186,9 +212,10 @@ pnpm version-packages
 pnpm release
 ```
 
-GitHub 发布工作流会先构建支持平台的原生绑定，汇总 WASM 产物，然后通过
-Changesets 创建版本 PR 或执行发布。首次发布前，需要在 GitHub 仓库配置
-`NPM_TOKEN` secret。
+GitHub 发布工作流会先构建支持平台的原生绑定，汇总 WASM 产物，生成 iOS
+XCFramework，然后通过 Changesets 创建版本 PR 或执行发布。首次发布前，
+需要在 GitHub 仓库配置 `NPM_TOKEN` secret。Swift Package 直接从 Git 仓库
+使用；如果要固定稳定版本，发布并使用带版本号的 Git tag 即可。
 
 ## 许可证
 
