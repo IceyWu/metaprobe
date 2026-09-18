@@ -49,7 +49,8 @@ struct ContentView: View {
             }
             let filename = item.itemIdentifier ?? "photo-or-video"
             let metadata = try Metaprobe.parse(data: data, filename: filename)
-            let json = try JSONEncoder.pretty.encode(metadata)
+            let jsonData = try JSONEncoder.pretty.encode(metadata)
+            let json = String(decoding: jsonData, as: UTF8.self)
             output = "资源：\(filename)\n大小：\(data.count) bytes\n\n\(json)"
             print(output)
         } catch {
