@@ -207,7 +207,8 @@ cargo clippy --workspace -- -D warnings
 
 The CI matrix builds native bindings for Windows, Linux, and macOS targets,
 validates the WASM and playground builds, and compiles all supported iOS Rust
-targets. The Release workflow additionally assembles the iOS XCFramework.
+targets. The iOS XCFramework is built and committed separately for Swift
+Package consumers; the Release workflow focuses on npm artifacts.
 
 ## Release
 
@@ -221,8 +222,8 @@ pnpm release
 ```
 
 On GitHub, the release workflow builds the native bindings for the supported
-platforms, assembles the WASM package, builds the iOS XCFramework artifact, and
-then creates a version PR or publishes through Changesets. Configure the
+platforms, assembles the WASM package, and then creates a version PR or
+publishes through Changesets. Configure the
 repository `NPM_TOKEN` secret before enabling the first publish. The Swift
 package is consumed from the Git repository; publish a tagged Git release when
 you want applications to pin a stable Swift version.

@@ -199,7 +199,8 @@ cargo clippy --workspace -- -D warnings
 ```
 
 CI 会为 Windows、Linux 和 macOS 构建原生绑定，验证 WASM 和 playground，
-并编译所有支持的 iOS Rust target。Release 工作流还会组装 iOS XCFramework。
+并编译所有支持的 iOS Rust target。iOS XCFramework 单独构建并提交给 Swift
+Package 使用；Release 工作流只处理 npm 产物。
 
 ## 发布
 
@@ -212,8 +213,8 @@ pnpm version-packages
 pnpm release
 ```
 
-GitHub 发布工作流会先构建支持平台的原生绑定，汇总 WASM 产物，生成 iOS
-XCFramework，然后通过 Changesets 创建版本 PR 或执行发布。首次发布前，
+GitHub 发布工作流会先构建支持平台的原生绑定，汇总 WASM 产物，然后通过
+Changesets 创建版本 PR 或执行发布。首次发布前，
 需要在 GitHub 仓库配置 `NPM_TOKEN` secret。Swift Package 直接从 Git 仓库
 使用；如果要固定稳定版本，发布并使用带版本号的 Git tag 即可。
 
