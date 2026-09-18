@@ -1,7 +1,7 @@
 name: MetaprobeDemo
 options:
   deploymentTarget:
-    iOS: "15.0"
+    iOS: "27.0"
 packages:
   metaprobe:
     path: ../..
