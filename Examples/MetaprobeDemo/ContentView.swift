@@ -1,9 +1,9 @@
 import SwiftUI
-import UniformTypeIdentifiers
+import PhotosUI
 import MetaprobeSwift
 
 struct ContentView: View {
-    @State private var showingPicker = false
+    @State private var selectedItem: PhotosPickerItem?
     @State private var output = "请选择一张照片或一个视频"
     @State private var isImporting = false
 
@@ -20,35 +20,37 @@ struct ContentView: View {
                 .background(Color(.secondarySystemBackground))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
 
-                Button("选择照片或视频") {
-                    showingPicker = true
+                PhotosPicker(
+                    selection: $selectedItem,
+                    matching: .any(of: [.images, .videos]),
+                    photoLibrary: .shared()
+                ) {
+                    Label("选择照片或视频", systemImage: "photo.on.rectangle")
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(isImporting)
             }
             .padding()
             .navigationTitle("Metaprobe Demo")
-            .fileImporter(
-                isPresented: $showingPicker,
-                allowedContentTypes: [.image, .movie, .video],
-                allowsMultipleSelection: false,
-                onCompletion: handleImport
-            )
+            .onChange(of: selectedItem) { _, item in
+                guard let item else { return }
+                Task { await handleImport(item) }
+            }
         }
     }
 
-    private func handleImport(_ result: Result<[URL], Error>) {
-        guard case let .success(urls) = result, let url = urls.first else { return }
+    private func handleImport(_ item: PhotosPickerItem) async {
         isImporting = true
         defer { isImporting = false }
 
         do {
-            let accessed = url.startAccessingSecurityScopedResource()
-            defer { if accessed { url.stopAccessingSecurityScopedResource() } }
-            let data = try Data(contentsOf: url)
-            let metadata = try Metaprobe.parse(data: data, filename: url.lastPathComponent)
+            guard let data = try await item.loadTransferable(type: Data.self) else {
+                throw MetaprobeError.invalidResult
+            }
+            let filename = item.itemIdentifier ?? "photo-or-video"
+            let metadata = try Metaprobe.parse(data: data, filename: filename)
             let json = try JSONEncoder.pretty.encode(metadata)
-            output = "文件：\(url.lastPathComponent)\n大小：\(data.count) bytes\n\n\(json)"
+            output = "资源：\(filename)\n大小：\(data.count) bytes\n\n\(json)"
             print(output)
         } catch {
             output = "解析失败：\(error)"
