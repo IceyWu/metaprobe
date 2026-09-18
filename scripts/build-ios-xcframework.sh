@@ -4,8 +4,12 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-source "$HOME/.zshrc" 2>/dev/null || true
 export PATH="${HOME}/.cargo/bin:${PATH}"
+
+command -v rustup >/dev/null || { echo "rustup is required" >&2; exit 1; }
+command -v cargo >/dev/null || { echo "cargo is required" >&2; exit 1; }
+command -v xcodebuild >/dev/null || { echo "xcodebuild is required" >&2; exit 1; }
+command -v xcrun >/dev/null || { echo "xcrun is required" >&2; exit 1; }
 
 IOS_TARGETS=(aarch64-apple-ios aarch64-apple-ios-sim x86_64-apple-ios)
 for target in "${IOS_TARGETS[@]}"; do
@@ -18,7 +22,7 @@ mkdir -p build/ios/headers
 cp crates/ios-ffi/include/metaprobe_ios.h build/ios/headers/
 cp crates/ios-ffi/include/module.modulemap build/ios/headers/
 
-lipo -create \
+xcrun lipo -create \
   target/aarch64-apple-ios-sim/release/libmetaprobe_ios_ffi.a \
   target/x86_64-apple-ios/release/libmetaprobe_ios_ffi.a \
   -output build/ios/libmetaprobe_ios_ffi_sim.a

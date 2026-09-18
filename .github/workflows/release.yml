@@ -25,7 +25,7 @@ jobs:
           rustc --version
           rustup show active-toolchain
       - name: Build iOS XCFramework
-        run: ./scripts/build-ios-xcframework.sh
+        run: bash -euxo pipefail ./scripts/build-ios-xcframework.sh
       - uses: actions/upload-artifact@v4
         with:
           name: Metaprobe.xcframework
