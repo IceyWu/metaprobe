@@ -4,7 +4,7 @@
 
 ## 使用方式
 
-1. 安装 [XcodeGen](https://github.com/yonaskolb/XcodeGen)，然后在本目录执行 `xcodegen generate`；也可以在 Xcode 中创建一个 iOS App（SwiftUI，iOS 14+），再将本目录下的两个 Swift 文件加入项目。
+1. 安装 [XcodeGen](https://github.com/yonaskolb/XcodeGen)，然后在本目录执行 `xcodegen generate`；也可以在 Xcode 中创建一个 iOS App（SwiftUI，iOS 15+），再将本目录下的两个 Swift 文件加入项目。
 3. 通过 `File > Add Package Dependencies...` 添加：
 
    `https://github.com/IceyWu/metaprobe.git`

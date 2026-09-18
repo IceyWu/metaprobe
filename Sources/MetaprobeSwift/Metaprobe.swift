@@ -1,7 +1,7 @@
 import Foundation
 import MetaprobeFFI
 
-public struct MediaMeta: Decodable, Sendable {
+public struct MediaMeta: Codable, Sendable {
     public let kind: String
     public let format: String
     public let width: UInt32

@@ -8,7 +8,7 @@ struct ContentView: View {
     @State private var isImporting = false
 
     var body: some View {
-        NavigationStack {
+        NavigationView {
             VStack(spacing: 16) {
                 ScrollView {
                     Text(output)

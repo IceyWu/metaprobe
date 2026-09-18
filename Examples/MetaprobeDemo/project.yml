@@ -1,7 +1,7 @@
 name: MetaprobeDemo
 options:
   deploymentTarget:
-    iOS: "14.0"
+    iOS: "15.0"
 packages:
   metaprobe:
     path: ../..
@@ -14,6 +14,8 @@ targets:
     dependencies:
       - package: metaprobe
         product: MetaprobeSwift
+    info:
+      path: Info.plist
     settings:
       PRODUCT_BUNDLE_IDENTIFIER: com.iceywu.metaprobe-demo
       INFOPLIST_KEY_UILaunchScreen_Generation: YES
