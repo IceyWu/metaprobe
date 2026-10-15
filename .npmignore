@@ -1,0 +1,2 @@
+# package.json files controls the package contents. Do not inherit .gitignore,
+# which excludes generated native binaries needed by published packages.

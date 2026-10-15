@@ -25,4 +25,6 @@ await mkdir(new URL('../miniprogram/', import.meta.url), { recursive: true })
 await writeFile(new URL('../miniprogram/glue.js', import.meta.url), glue)
 await copyFile(new URL('../src/miniprogram/glue.d.ts', import.meta.url), new URL('../miniprogram/glue.d.ts', import.meta.url))
 await copyFile(new URL('../wasm/index_bg.wasm', import.meta.url), new URL('../miniprogram/index_bg.wasm', import.meta.url))
+// wasm-pack writes a wildcard .gitignore; override it for npm's package walker.
+await writeFile(new URL('../wasm/.npmignore', import.meta.url), '')
 console.log('Mini-program WASM and glue generated.')
