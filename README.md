@@ -103,6 +103,45 @@ Use `extractMeta` when the WASM implementation should calculate SHA-256. Use
 `extractMetaFastSized` is useful for video slices because it preserves the
 original file size for bitrate calculation.
 
+## WeChat mini-program / uni-app
+
+Use the dedicated `metaprobe/miniprogram` entry, which does not load the Node
+binding or browser WASM loader. The handwritten adapter is TypeScript; the
+build emits JavaScript, declarations, matching glue, and the WASM binary.
+
+```bash
+pnpm build:wasm
+pnpm test:miniprogram
+```
+
+Copy `miniprogram/index_bg.wasm` into your app's code package, for example
+`static/metaprobe/index_bg.wasm` (`src/static/metaprobe/` in uni-app).
+
+```ts
+import init, { extractMetaFastSized } from 'metaprobe/miniprogram'
+
+await init({ wasmPath: 'static/metaprobe/index_bg.wasm' })
+// Read localFilePath through wx.getFileSystemManager().readFile without encoding.
+const meta = extractMetaFastSized(bytes, filename, bytes.byteLength)
+```
+
+The loader uses `WXWebAssembly.instantiate` with a packaged file path. It does
+not need `fetch`, DOM, or global `TextEncoder`/`TextDecoder`. Concurrent calls
+with the same configuration share initialization; failed loads can be retried.
+File I/O and uploading remain the caller's responsibility.
+
+Validated in WeChat DevTools with base library 3.17.3: WASM loading,
+image/video metadata, EXIF, SHA-256, batch error isolation, and reading a real
+PNG through the mini-program file system. Android/iOS devices and other
+mini-program platforms have not been validated. Whole-file reads consume both
+JS and WASM memory; large videos need a caller-provided metadata slicing
+strategy. Arbitrary slices may omit required metadata.
+
+A real 23.7 MB JPEG was also validated using 1 MiB `open`/`read` chunks. In
+DevTools, a large single `readFile` binary response can fail inside the simulator
+with `InvalidCharacterError` from `atob`. Read large files in bounded chunks;
+combining the chunks for extraction still requires memory for the whole file.
+
 ## Swift / iOS API
 
 Add the repository URL in Xcode with **File > Add Package Dependencies…**:

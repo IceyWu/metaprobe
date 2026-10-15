@@ -99,7 +99,7 @@ jobs:
           merge-multiple: true
 
       - name: Build WASM and verify release package
-        run: pnpm build:wasm && pnpm release:check
+        run: pnpm build:wasm && pnpm test:miniprogram && pnpm release:check
 
       - name: Create release PR or publish
         id: changesets

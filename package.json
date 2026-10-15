@@ -29,11 +29,17 @@
         "types": "./wasm/index.d.ts",
         "default": "./wasm/index.js"
       }
-    }
+    },
+    "./miniprogram": {
+      "types": "./miniprogram/index.d.ts",
+      "default": "./miniprogram/index.js"
+    },
+    "./miniprogram/index_bg.wasm": "./miniprogram/index_bg.wasm"
   },
   "files": [
     "native/",
-    "wasm/"
+    "wasm/",
+    "miniprogram/"
   ],
   "publishConfig": {
     "access": "public"
@@ -51,7 +57,9 @@
   "scripts": {
     "build:napi": "napi build --output-dir native --platform --release --manifest-path crates/napi/Cargo.toml",
     "build:napi:debug": "napi build --output-dir native --platform --manifest-path crates/napi/Cargo.toml",
-    "build:wasm": "wasm-pack build crates/wasm --target web --out-dir ../../wasm --out-name index",
+    "build:wasm": "wasm-pack build crates/wasm --target web --out-dir ../../wasm --out-name index && pnpm build:miniprogram",
+    "build:miniprogram": "tsc -p tsconfig.miniprogram.json && node scripts/build-miniprogram.mjs",
+    "test:miniprogram": "node --test test/miniprogram.test.mjs",
     "build": "pnpm build:napi && pnpm build:wasm",
     "benchmark": "node scripts/benchmark.mjs",
     "changeset": "changeset",
@@ -65,7 +73,8 @@
     "@changesets/cli": "^3.0.2",
     "@napi-rs/cli": "^3.9.0",
     "exifr": "^7.1.3",
-    "mediainfo.js": "^0.3.7"
+    "mediainfo.js": "^0.3.7",
+    "typescript": "5.9.3"
   },
   "engines": {
     "node": ">= 16"

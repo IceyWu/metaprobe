@@ -5,6 +5,14 @@ const required = [
   'native/index.d.ts',
   'wasm/index.js',
   'wasm/index_bg.wasm',
+  'miniprogram/index.js',
+  'miniprogram/index.d.ts',
+  'miniprogram/types.d.ts',
+  'miniprogram/glue.d.ts',
+  'miniprogram/package.json',
+  'miniprogram/utf8.js',
+  'miniprogram/glue.js',
+  'miniprogram/index_bg.wasm',
 ]
 
 if (process.env.METAPROBE_VERIFY_ALL_TARGETS === '1') {

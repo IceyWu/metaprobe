@@ -100,6 +100,47 @@ const meta = extractMetaFastSized(bytes, file.name, file.size)
 API 单独计算哈希，使用 `extractMetaFast`。处理视频切片时，推荐使用
 `extractMetaFastSized`，它可以保留原始文件大小并正确计算码率。
 
+## 微信小程序 / uni-app
+
+使用独立的 `metaprobe/miniprogram` 入口，避免引入 Node 原生绑定或浏览器 WASM 加载器。
+手写适配层使用 TypeScript，构建时生成 JavaScript、声明文件和匹配的 WASM 胶水代码。
+
+```bash
+pnpm build:wasm
+pnpm test:miniprogram
+```
+
+将构建生成的 `miniprogram/index_bg.wasm` 复制到小程序代码包的
+`static/metaprobe/index_bg.wasm`。uni-app 可放到 `src/static/metaprobe/`。
+
+```ts
+import init, { extractMetaFastSized } from 'metaprobe/miniprogram'
+
+await init({ wasmPath: 'static/metaprobe/index_bg.wasm' })
+
+wx.getFileSystemManager().readFile({
+  filePath: localFilePath,
+  success: ({ data }) => {
+    const bytes = new Uint8Array(data as ArrayBuffer)
+    const meta = extractMetaFastSized(bytes, filename, bytes.byteLength)
+    console.log(meta.width, meta.height, meta.exif)
+  },
+})
+```
+
+该入口通过 `WXWebAssembly.instantiate` 加载代码包文件，不依赖 `fetch`、DOM、
+`TextEncoder` 或 `TextDecoder` 全局对象。同一配置的并发初始化共享一个加载任务，
+失败后可重试。不会自动读取文件或上传数据。
+
+已在微信开发者工具模拟器基础库 3.17.3 验证 WASM 加载、图片/视频元数据、EXIF、
+SHA-256、批量解析、错误隔离及真实 PNG 的文件读取；Android/iOS 真机和其他小程序
+平台尚未验证。小程序样例中的完整文件读取会占用 JS 和 WASM 内存，大视频需结合调用方
+的分片读取策略；解析器不会自动查找任意文件切片之外的元数据。
+
+另外已用 1 MiB 的 `open`/`read` 分段读取验证真实 23.7 MB JPEG。开发者工具对大文件
+一次性 `readFile` 的二进制响应可能在模拟器内部触发 `atob` 的 `InvalidCharacterError`。
+大文件应限制每次读取大小；拼接后解析仍需要容纳完整文件的内存。
+
 ## Swift / iOS API
 
 在 Xcode 中通过 **File > Add Package Dependencies…** 添加：

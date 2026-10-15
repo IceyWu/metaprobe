@@ -61,6 +61,7 @@ jobs:
       - uses: taiki-e/install-action@wasm-pack
       - run: pnpm install --frozen-lockfile
       - run: pnpm build:wasm
+      - run: pnpm test:miniprogram
       - run: pnpm --dir playground lint
       - run: pnpm --dir playground build
 
