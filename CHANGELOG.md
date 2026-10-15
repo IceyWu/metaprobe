@@ -6,7 +6,7 @@
 
 - d9f931b: Add a TypeScript-based `metaprobe/miniprogram` entry that loads packaged WASM through WeChat's `WXWebAssembly`, without browser or Node globals. Include matching WASM assets, declarations, UTF-8 codecs, initialization retry/deduplication, and image/video metadata regression tests.
 
-## 0.1.0
+## 0.0.1
 
 首个公开版本：
 
