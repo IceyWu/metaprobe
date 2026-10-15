@@ -1,6 +1,6 @@
 {
   "name": "metaprobe",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "packageManager": "pnpm@12.2.1",
   "description": "High-performance image and video metadata extraction powered by Rust — works in Node.js (native) and browser (WASM)",
   "author": {
