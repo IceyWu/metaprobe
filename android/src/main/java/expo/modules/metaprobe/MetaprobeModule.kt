@@ -26,17 +26,28 @@ class MetaprobeModule : Module() {
   private fun decodeBitmap(uri: Uri, maxDimension: Int, context: android.content.Context): Bitmap {
     val dimension = maxDimension.coerceAtLeast(1)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-      val source = ImageDecoder.createSource(context.contentResolver, uri)
-      return ImageDecoder.decodeBitmap(source) { decoder, info, _ ->
-        decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
-        val scale = minOf(1.0, dimension.toDouble() / maxOf(info.size.width, info.size.height))
-        decoder.setTargetSize(
-          maxOf(1, (info.size.width * scale).roundToInt()),
-          maxOf(1, (info.size.height * scale).roundToInt())
-        )
-      }
+      runCatching {
+        val source = ImageDecoder.createSource(context.contentResolver, uri)
+        ImageDecoder.decodeBitmap(source) { decoder, info, _ ->
+          decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+          val longestSide = maxOf(info.size.width, info.size.height)
+          val sampleSize = maxOf(1, (longestSide + dimension - 1) / dimension)
+          decoder.setTargetSampleSize(sampleSize)
+        }
+      }.getOrNull()?.let { return it }
     }
-    return context.contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it) }
+    val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+    context.contentResolver.openInputStream(uri)?.use {
+      BitmapFactory.decodeStream(it, null, bounds)
+    }
+    var sampleSize = 1
+    while (maxOf(bounds.outWidth, bounds.outHeight) / sampleSize > dimension * 2) {
+      sampleSize *= 2
+    }
+    val options = BitmapFactory.Options().apply { inSampleSize = sampleSize }
+    return context.contentResolver.openInputStream(uri)?.use {
+      BitmapFactory.decodeStream(it, null, options)
+    }
       ?: throw FileNotFoundException("Cannot decode selected image: $uri")
   }
 
