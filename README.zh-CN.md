@@ -164,6 +164,31 @@ Swift Package 支持 iOS 13 及以上。可运行的 SwiftUI 示例位于
 [`Examples/MetaprobeDemo`](./Examples/MetaprobeDemo)，当前示例为适配最新
 Xcode 模拟器而使用 iOS 27，并通过 `PhotosPicker` 选择照片或视频。
 
+## React Native / Expo
+
+React Native 通过 Expo Modules API 调用平台原生绑定，文件 URI 在原生侧读取，
+媒体字节不会经 JavaScript Base64 桥传输。Android JNI 与 iOS Swift wrapper
+复用相同的 Rust 解析核心。
+
+```tsx
+import { extractMeta } from 'metaprobe/react-native'
+
+const metadata = await extractMeta(asset.uri, asset.fileName ?? 'media')
+console.log(metadata.kind, metadata.format, metadata.exif)
+```
+
+Android 构建需要 Rust Android target、Android NDK 和 `cargo-ndk`。生成当前设备
+arm64 绑定：
+
+```bash
+rustup target add aarch64-linux-android
+cargo install cargo-ndk
+pnpm build:android:arm64
+```
+
+iOS 通过随包提供的 `Metaprobe.xcframework` 编译 Swift 模块。Expo 应用添加
+`metaprobe` 依赖后需重新构建 development build；Expo Go 不包含此原生模块。
+
 ## 返回数据
 
 图片常用字段：

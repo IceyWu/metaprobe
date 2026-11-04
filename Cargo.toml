@@ -1,5 +1,11 @@
 [workspace]
-members = ["crates/core", "crates/napi", "crates/wasm", "crates/ios-ffi"]
+members = [
+    "crates/core",
+    "crates/napi",
+    "crates/wasm",
+    "crates/ios-ffi",
+    "crates/android-ffi",
+]
 resolver = "2"
 
 [profile.release]

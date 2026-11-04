@@ -1,0 +1,16 @@
+[package]
+name = "metaprobe-android-ffi"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/IceyWu/metaprobe"
+description = "Android JNI bindings for metaprobe"
+
+[lib]
+name = "metaprobe_android"
+crate-type = ["cdylib"]
+
+[dependencies]
+metaprobe-core = { path = "../core" }
+jni = "0.21.1"
+serde_json = "1"
