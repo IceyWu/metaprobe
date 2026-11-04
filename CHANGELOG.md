@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- e59eaa9: Add the Expo and React Native native module to the published package, including Android and iOS bridge artifacts.
+
 ## 0.1.0
 
 ### Minor Changes
