@@ -2,7 +2,7 @@
   "name": "metaprobe",
   "version": "0.1.0",
   "packageManager": "pnpm@12.2.1",
-  "description": "High-performance image and video metadata extraction powered by Rust — works in Node.js (native) and browser (WASM)",
+  "description": "Cross-platform image and video metadata extraction powered by Rust — Node.js, browser, Expo and React Native",
   "author": {
     "name": "Lev Wu",
     "email": "hi@levwu.me",
@@ -80,7 +80,7 @@
     "build": "pnpm build:napi && pnpm build:wasm",
     "benchmark": "node scripts/benchmark.mjs",
     "changeset": "changeset",
-    "version-packages": "changeset version",
+    "version-packages": "changeset version && node scripts/sync-native-version.mjs",
     "release:check": "node scripts/release-check.mjs",
     "release": "pnpm release:check && pnpm exec changeset publish",
     "prepack": "node scripts/prepack.mjs",
@@ -132,6 +132,8 @@
     "wasm",
     "rust",
     "native",
-    "browser"
+    "browser",
+    "expo",
+    "react-native"
   ]
 }

@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.author         = { 'Lev Wu' => 'hi@levwu.me' }
   s.homepage       = 'https://github.com/IceyWu/metaprobe'
   s.platforms      = { :ios => '13.0' }
-  s.source         = { :git => 'https://github.com/IceyWu/metaprobe.git', :tag => s.version.to_s }
+  s.source         = { :git => 'https://github.com/IceyWu/metaprobe.git', :tag => "metaprobe@#{s.version}" }
   s.module_name    = 'Metaprobe'
   s.swift_version  = '5.9'
   s.source_files   = 'ios/**/*.swift', 'Sources/MetaprobeSwift/**/*.swift'
