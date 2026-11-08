@@ -26,7 +26,7 @@ jobs:
             target: x86_64-pc-windows-msvc
           - os: macos-15-intel
             target: x86_64-apple-darwin
-          - os: macos-14
+          - os: macos-15
             target: aarch64-apple-darwin
     runs-on: ${{ matrix.os }}
     steps:
@@ -66,9 +66,9 @@ jobs:
       - run: pnpm --dir playground build
 
   ios:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - run: bash scripts/build-ios-xcframework.sh
-      - run: test -s Metaprobe.xcframework/ios-arm64/libmetaprobe_ios_ffi.a && test -s Metaprobe.xcframework/ios-arm64_x86_64-simulator/libmetaprobe_ios_ffi_sim.a
+      - run: test -s Metaprobe.xcframework/ios-arm64/libmetaprobe_ios_ffi.a && test -s Metaprobe.xcframework/ios-arm64_x86_64-simulator/libmetaprobe_ios_ffi.a
