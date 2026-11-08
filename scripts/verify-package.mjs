@@ -26,7 +26,7 @@ const required = [
   'Sources/MetaprobeSwift/Metaprobe.swift',
   'Metaprobe.xcframework/Info.plist',
   'Metaprobe.xcframework/ios-arm64/libmetaprobe_ios_ffi.a',
-  'Metaprobe.xcframework/ios-arm64_x86_64-simulator/libmetaprobe_ios_ffi_sim.a',
+  'Metaprobe.xcframework/ios-arm64_x86_64-simulator/libmetaprobe_ios_ffi.a',
 ]
 
 if (process.env.METAPROBE_VERIFY_ALL_TARGETS === '1') {

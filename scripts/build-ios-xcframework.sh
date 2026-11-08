@@ -25,12 +25,12 @@ cp crates/ios-ffi/include/module.modulemap build/ios/headers/
 xcrun lipo -create \
   target/aarch64-apple-ios-sim/release/libmetaprobe_ios_ffi.a \
   target/x86_64-apple-ios/release/libmetaprobe_ios_ffi.a \
-  -output build/ios/libmetaprobe_ios_ffi_sim.a
+  -output build/ios/libmetaprobe_ios_ffi.a
 
 xcodebuild -create-xcframework \
   -library target/aarch64-apple-ios/release/libmetaprobe_ios_ffi.a \
   -headers build/ios/headers \
-  -library build/ios/libmetaprobe_ios_ffi_sim.a \
+  -library build/ios/libmetaprobe_ios_ffi.a \
   -headers build/ios/headers \
   -output "Metaprobe.xcframework"
 

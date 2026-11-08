@@ -1,6 +1,8 @@
 {
   "platforms": ["apple", "android"],
   "apple": {
+    "podspecPath": "metaprobe.podspec",
+    "swiftModuleName": "Metaprobe",
     "modules": ["MetaprobeModule"]
   },
   "android": {
