@@ -1,6 +1,6 @@
 {
   "name": "metaprobe",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "packageManager": "pnpm@12.2.1",
   "description": "Cross-platform image and video metadata extraction powered by Rust — Node.js, browser, Expo and React Native",
   "author": {
