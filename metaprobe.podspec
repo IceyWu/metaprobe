@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name           = 'metaprobe'
-  s.version        = '0.2.0'
+  s.version        = '0.2.1'
   s.summary        = 'Cross-platform media metadata extraction powered by Rust'
   s.description    = 'Expo module bindings for local image and video metadata extraction.'
   s.license        = { :type => 'MIT', :file => 'LICENSE' }

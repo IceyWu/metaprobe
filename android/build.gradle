@@ -4,13 +4,13 @@ plugins {
 }
 
 group = 'expo.modules.metaprobe'
-version = '0.2.0'
+version = '0.2.1'
 
 android {
   namespace "expo.modules.metaprobe"
   defaultConfig {
     versionCode 1
-    versionName '0.2.0'
+    versionName '0.2.1'
   }
 }
 
